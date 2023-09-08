@@ -1,0 +1,42 @@
+name: "CodeQL IaC"
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: 'ubuntu-latest'
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: main
+
+      - name: Get Token
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v2
+        with:
+          organization: advanced-security
+          application_id: ${{ secrets.OCTODEMOBOT_APPLICATION_ID_REPO_AUTOMATION }}
+          application_private_key: ${{ secrets.OCTODEMOBOT_APPLICATION_KEY_REPO_AUTOMATION }}
+  
+      - name: Checkout advanced-security/codeql-extractor-iac action
+        uses: actions/checkout@v4
+        with:
+          repository: advanced-security/codeql-extractor-iac
+          path: codeql-extractor-iac
+          token: ${{ steps.get_workflow_token.outputs.token }}
+  
+      - name: Automatically try and enable GitHub Advanced Security 
+        uses: ./codeql-extractor-iac
+        with:
+          source-root: "main"
+          token: ${{ steps.get_workflow_token.outputs.token }}
