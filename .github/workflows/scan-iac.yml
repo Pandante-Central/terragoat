@@ -20,6 +20,15 @@ jobs:
         with:
           path: main
 
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run Prisma Cloud 
+        id: prisma-cloud
+        uses: bridgecrewio/checkov-action@master 
+        with:
+          api-key: ${{ secrets.BC_API_KEY }}
+
       # - name: Get Token
       #   id: get_workflow_token
       #   uses: peter-murray/workflow-application-token-action@v2
@@ -28,15 +37,15 @@ jobs:
       #     application_id: ${{ secrets.OCTODEMOBOT_APPLICATION_ID_REPO_AUTOMATION }}
       #     application_private_key: ${{ secrets.OCTODEMOBOT_APPLICATION_KEY_REPO_AUTOMATION }}
   
-      - name: Checkout advanced-security/codeql-extractor-iac action
-        uses: actions/checkout@v4
-        with:
-          repository: advanced-security/codeql-extractor-iac
-          path: codeql-extractor-iac
-          token: ${{ secrets.GH_TOKEN }}
+      # - name: Checkout advanced-security/codeql-extractor-iac action
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: advanced-security/codeql-extractor-iac
+      #     path: codeql-extractor-iac
+      #     token: ${{ secrets.GH_TOKEN }}
   
-      - name: Automatically try and enable GitHub Advanced Security 
-        uses: ./codeql-extractor-iac
-        with:
-          source-root: "main"
-          token: ${{ secrets.GH_TOKEN }}
+      # - name: Automatically try and enable GitHub Advanced Security 
+      #   uses: ./codeql-extractor-iac
+      #   with:
+      #     source-root: "main"
+      #     token: ${{ secrets.GH_TOKEN }}
