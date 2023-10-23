@@ -1,7 +1,9 @@
-name: "CodeQL IaC"
+name: "Scan IaC"
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
   workflow_dispatch:
 
